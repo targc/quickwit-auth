@@ -12,7 +12,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Expose nginx port (will proxy to Quickwit on 7280)
-EXPOSE 80
+EXPOSE 8080
 
 # Set entrypoint to start both nginx and Quickwit (stay as root to manage nginx)
 ENTRYPOINT ["/entrypoint.sh"]

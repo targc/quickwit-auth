@@ -10,10 +10,34 @@ else
     echo "Default auth: admin/admin"
 fi
 
+# Function to handle cleanup
+cleanup() {
+    echo "Received shutdown signal, stopping processes..."
+    if [ ! -z "$QUICKWIT_PID" ]; then
+        kill $QUICKWIT_PID
+        wait $QUICKWIT_PID 2>/dev/null || true
+    fi
+    if [ ! -z "$NGINX_PID" ]; then
+        kill $NGINX_PID
+        wait $NGINX_PID 2>/dev/null || true
+    fi
+    exit 0
+}
+
+# Set up signal handlers
+trap cleanup SIGTERM SIGINT
+
+# Start nginx in background
+echo "Starting nginx..."
+nginx -g 'daemon off;' &
+NGINX_PID=$!
+
 # Start Quickwit in background
 echo "Starting Quickwit..."
-quickwit run &
+quickwit run --config /quickwit/config/quickwit.yaml &
+QUICKWIT_PID=$!
 
-# Start nginx in foreground
-echo "Starting nginx..."
-exec nginx -g 'daemon off;'
+echo "Both services started. PIDs: Quickwit=$QUICKWIT_PID, Nginx=$NGINX_PID"
+
+# Wait for either process to exit
+wait

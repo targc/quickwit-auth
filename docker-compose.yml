@@ -5,8 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "7280:80"
-    command: ["run", "--config", "/quickwit/config/quickwit.yaml"]
+      - "7280:8080"
     volumes:
       - quickwit_data_index:/quickwit/qwdata/indexes
       - ./quickwit.yaml:/quickwit/config/quickwit.yaml
