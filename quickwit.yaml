@@ -1,0 +1,13 @@
+version: 0.8
+# storage:
+#   google: {} 
+# metastore:
+#   uri: "gs://quickwit-demo/metastore"
+
+storage:
+  s3:
+    flavor: gcs
+    region: asia-southeast1
+    endpoint: https://storage.googleapis.com
+
+default_index_root_uri: gs://quickwit-demo/indexes/
